@@ -10,7 +10,7 @@ import { CheckoutProvider } from '@/modules/checkout/context/checkout-context';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'Elecshop',
+  title: 'Sandymart',
   description: 'Modern eCommerce platform',
 };
 
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning >
       <body
         className={`${satoshi.variable} antialiased min-h-screen flex flex-col`}
       >
