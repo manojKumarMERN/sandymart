@@ -31,7 +31,7 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private usersService: UsersService,
-  ) {}
+  ) { }
 
   @ApiOperation({ summary: 'Login with email and password' })
   @ApiResponse({
@@ -49,6 +49,7 @@ export class AuthController {
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) response: Response,
   ) {
+    console.log(loginDto, "loginDto");
     const user = await this.authService.validateUser(
       loginDto.email,
       loginDto.password,
@@ -129,6 +130,7 @@ export class AuthController {
   })
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
+    console.log(registerDto, "registerDto");
     const user = await this.usersService.create(registerDto);
     return this.authService.login(user);
   }

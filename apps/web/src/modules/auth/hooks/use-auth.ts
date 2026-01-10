@@ -12,6 +12,8 @@ export function useLogin() {
   return useMutation({
     mutationFn: authApi.login,
     onSuccess: data => {
+      localStorage.setItem('accessToken', data.accessToken);
+      document.cookie = `access_token=${data.accessToken}; path=/; max-age=86400; SameSite=Lax`;
       queryClient.setQueryData(['user'], data.user);
       router.push('/');
       toast({
@@ -36,6 +38,8 @@ export function useRegister() {
   return useMutation({
     mutationFn: authApi.register,
     onSuccess: data => {
+      localStorage.setItem('accessToken', data.accessToken);
+      document.cookie = `access_token=${data.accessToken}; path=/; max-age=86400; SameSite=Lax`;
       queryClient.setQueryData(['user'], data.user);
       router.push('/');
       toast({
@@ -59,6 +63,8 @@ export function useLogout() {
   return useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
+      localStorage.removeItem('accessToken');
+      document.cookie = 'access_token=; path=/; max-age=0';
       queryClient.setQueryData(['user'], null);
       toast({
         title: 'Signed out',

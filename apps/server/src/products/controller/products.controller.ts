@@ -24,8 +24,7 @@ import { UserDocument } from '@/users/schemas/user.schema';
 import { CurrentUser } from '@/decorators/current-user.decorator';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { AppService } from '@/app/services/app.service';
-import { ProductExpertAgent } from '@/ai/agents/product-expert.agent';
-import { ChatRequest } from '@apps/shared/types/agents';
+
 import { Response } from 'express';
 
 @Controller('products')
@@ -33,8 +32,7 @@ export class ProductsController {
   constructor(
     private productsService: ProductsService,
     private appService: AppService,
-    private productExpertAgent: ProductExpertAgent,
-  ) {}
+  ) { }
 
   @Get()
   getProducts(
@@ -113,12 +111,5 @@ export class ProductsController {
     return this.productsService.createReview(id, user, rating, comment);
   }
 
-  @Post('agent/chat') //TODO: add admin guard
-  async chat(@Body() body: ChatRequest, @Res() res: Response) {
-    const { messages } = body;
 
-    const result = await this.productExpertAgent.chat(messages);
-
-    return result.pipeDataStreamToResponse(res);
-  }
 }

@@ -16,7 +16,7 @@ export class ProductsService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<Product>,
     @InjectModel(Order.name) private orderModel: Model<Order>,
-  ) {}
+  ) { }
 
   async findTopRated(): Promise<ProductDocument[]> {
     const products = await this.productModel
@@ -25,6 +25,8 @@ export class ProductsService {
       .limit(3);
 
     if (!products.length) throw new NotFoundException('No products found.');
+
+    console.log(products, "products==>>><<<");
 
     return products;
   }
@@ -41,20 +43,20 @@ export class ProductsService {
 
     const searchPattern = decodedKeyword
       ? decodedKeyword
-          .split(' ')
-          .map(term => `(?=.*${term})`)
-          .join('')
+        .split(' ')
+        .map(term => `(?=.*${term})`)
+        .join('')
       : '';
 
     const searchQuery = decodedKeyword
       ? {
-          $or: [
-            { name: { $regex: searchPattern, $options: 'i' } },
-            { description: { $regex: searchPattern, $options: 'i' } },
-            { brand: { $regex: searchPattern, $options: 'i' } },
-            { category: { $regex: searchPattern, $options: 'i' } },
-          ],
-        }
+        $or: [
+          { name: { $regex: searchPattern, $options: 'i' } },
+          { description: { $regex: searchPattern, $options: 'i' } },
+          { brand: { $regex: searchPattern, $options: 'i' } },
+          { category: { $regex: searchPattern, $options: 'i' } },
+        ],
+      }
       : {};
 
     const count = await this.productModel.countDocuments(searchQuery);

@@ -50,11 +50,10 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
   }
 
-  app.enableShutdownHooks();
-
   const port = process.env.PORT || 4000;
   await app.listen(port);
 
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  console.log(`🚀 Application is running on http://localhost:${port}`);
 }
+
 bootstrap();

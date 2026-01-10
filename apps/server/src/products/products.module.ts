@@ -4,9 +4,8 @@ import { ProductsController } from './controller/products.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from './schemas/product.schema';
 import { AppService } from '@/app/services/app.service';
-import { CloudinaryModule } from '@/cloudinary/cloudinary.module';
-import { AiModule } from '@/ai/ai.module';
-import { ProductExpertAgent } from '@/ai/agents/product-expert.agent';
+import { MediaModule } from '@/media/media.module';
+
 import { Order } from '@/orders/schemas/order.schema';
 import { OrderSchema } from '@/orders/schemas/order.schema';
 
@@ -22,11 +21,11 @@ import { OrderSchema } from '@/orders/schemas/order.schema';
         schema: OrderSchema,
       },
     ]),
-    CloudinaryModule,
-    AiModule,
+    MediaModule,
+
   ],
-  providers: [ProductsService, AppService, ProductExpertAgent],
+  providers: [ProductsService, AppService],
   controllers: [ProductsController],
   exports: [ProductsService],
 })
-export class ProductsModule {}
+export class ProductsModule { }

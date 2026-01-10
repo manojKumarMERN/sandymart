@@ -12,6 +12,7 @@ export async function fetchWithAuth(
 ) {
   const { revalidatePaths, headers, ...rest } = config;
   const accessToken = await getAccessToken();
+  console.log(accessToken, "accessToken==>>><<<");
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
     ...rest,

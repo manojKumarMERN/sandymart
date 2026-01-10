@@ -6,6 +6,7 @@ const protectedPaths = ['/profile', '/orders', '/admin'];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  console.log(pathname, request.cookies);
   const hasTokens =
     request.cookies.get('access_token') || request.cookies.get('refresh_token');
   const isAuthenticated = hasTokens;
