@@ -15,12 +15,39 @@ async function bootstrap() {
   app.use(helmet());
   app.use(cookieParser());
 
+  const allowedOrigins =
+    process.env.ALLOWED_ORIGINS
+      ?.split(',')
+      .map(origin => origin.trim().replace(/\/$/, ''))
+    ?? ['http://localhost:3000'];
+
   app.enableCors({
-    origin: process.env.ALLOWED_ORIGINS?.split(',') || 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    origin: (origin, callback) => {
+      if (!origin) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('✅ CORS allowed (no origin)');
+        }
+        return callback(null, true);
+      }
+
+      const normalizedOrigin = origin.replace(/\/$/, '');
+
+      if (allowedOrigins.includes(normalizedOrigin)) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.log(`✅ CORS allowed for origin: ${normalizedOrigin}`);
+        }
+        return callback(null, true);
+      }
+
+      console.error(`❌ CORS blocked for origin: ${origin}`);
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   });
+
+
 
   app.enableVersioning({
     type: VersioningType.URI,

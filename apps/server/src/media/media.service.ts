@@ -48,7 +48,7 @@ export class MediaService {
                 });
                 const savedFile = await newFile.save();
                 // TODO: Use correct Environment variable for host
-                return `${process.env.BACKEND_URL || 'http://localhost:3000'}/api/media/${savedFile._id}`;
+                return `${process.env.BACKEND_URL || 'http://localhost:4000'}/api/media/${savedFile._id}`;
             } catch (error) {
                 console.error('Error uploading image from URL:', error);
                 return null;
@@ -66,6 +66,6 @@ export class MediaService {
             data: buffer
         });
         const savedFile = await newFile.save();
-        return `${process.env.BACKEND_URL || 'http://localhost:3000'}/api/media/${savedFile._id}`;
+        return `${process.env.BACKEND_URL || 'http://localhost:4000'}/api/media/${savedFile._id}`;
     }
 }

@@ -3,6 +3,7 @@ export interface CookieOptions {
   secure: boolean;
   sameSite: 'lax' | 'strict' | 'none';
   maxAge: number;
+  path: string;
 }
 
 export interface CookieConfig {
@@ -10,14 +11,15 @@ export interface CookieConfig {
   options: CookieOptions;
 }
 
-export const cookieConfig: Record<string, CookieConfig> = {
+export const cookieConfig = {
   access: {
     name: 'access_token',
     options: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax' as const,
-      maxAge: 10 * 60 * 1000, // 10 minutes,
+      sameSite: 'lax',
+      maxAge: 10 * 60,
+      path: '/',
     },
   },
   refresh: {
@@ -25,8 +27,9 @@ export const cookieConfig: Record<string, CookieConfig> = {
     options: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax' as const,
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
+      path: '/',
     },
   },
 } as const;
