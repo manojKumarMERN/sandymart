@@ -1,17 +1,22 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const publicPaths = ['/login', '/register', '/forgot-password'];
+const publicPaths = ['/register', '/forgot-password'];
 const protectedPaths = ['/profile', '/orders', '/admin'];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  console.log(pathname, request.cookies);
-  const hasTokens =
-    request.cookies.get('access_token') || request.cookies.get('refresh_token');
-  const isAuthenticated = hasTokens;
+  const accessToken = request.cookies.get('access_token');
+  const refreshToken = request.cookies.get('refresh_token');
 
-  // Skip middleware for non-relevant paths (like api, _next, static files)
+  const hasToken = accessToken || refreshToken;
+
+  const isAuthenticated = Boolean(hasToken);
+
+  console.log(isAuthenticated, accessToken, refreshToken, "isAuthenticated");
+
+
+  // Skip internal/static paths
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
@@ -20,12 +25,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Redirect authenticated users trying to access auth pages
-  if (isAuthenticated && publicPaths.includes(pathname)) {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
-
-  // Redirect unauthenticated users trying to access protected pages
+  // ❌ NOT authenticated → protected route → redirect to login
   if (
     !isAuthenticated &&
     protectedPaths.some(path => pathname.startsWith(path))
@@ -33,18 +33,17 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
+  // ✅ Authenticated → prevent visiting auth pages
+  if (
+    isAuthenticated &&
+    publicPaths.some(path => pathname.startsWith(path))
+  ) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public files (public folder)
-     */
-    '/((?!_next/static|_next/image|favicon.ico|public/).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|public/).*)'],
 };

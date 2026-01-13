@@ -24,12 +24,12 @@ export function UserMenu() {
 
   if (!user) {
     return (
-      <Link href="/login">
-        <Button variant="ghost" size="sm">
+      <Button variant="ghost" size="sm" asChild>
+        <Link href="/login">
           <User className="h-4 w-4 mr-2" />
           Sign In
-        </Button>
-      </Link>
+        </Link>
+      </Button>
     );
   }
 

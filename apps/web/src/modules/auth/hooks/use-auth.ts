@@ -12,8 +12,7 @@ export function useLogin() {
   return useMutation({
     mutationFn: authApi.login,
     onSuccess: data => {
-      localStorage.setItem('accessToken', data.accessToken);
-      document.cookie = `access_token=${data.accessToken}; path=/; max-age=86400; SameSite=Lax`;
+      console.log(data, "<<data>>>");
       queryClient.setQueryData(['user'], data.user);
       router.push('/');
       toast({
@@ -38,8 +37,6 @@ export function useRegister() {
   return useMutation({
     mutationFn: authApi.register,
     onSuccess: data => {
-      localStorage.setItem('accessToken', data.accessToken);
-      document.cookie = `access_token=${data.accessToken}; path=/; max-age=86400; SameSite=Lax`;
       queryClient.setQueryData(['user'], data.user);
       router.push('/');
       toast({

@@ -16,9 +16,9 @@ export const cookieConfig = {
     name: 'access_token',
     options: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
       sameSite: 'lax',
-      maxAge: 10 * 60,
+      maxAge: 7 * 24 * 60 * 60,
       path: '/',
     },
   },
@@ -26,7 +26,7 @@ export const cookieConfig = {
     name: 'refresh_token',
     options: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60,
       path: '/',

@@ -57,6 +57,8 @@ export class AuthController {
 
     const { tokens, user: userData } = await this.authService.login(user);
 
+    console.log(tokens, "tokens");
+
     response.cookie(
       'access_token',
       tokens.accessToken,
@@ -90,6 +92,8 @@ export class AuthController {
     }
 
     const tokens = await this.authService.refresh(refreshToken);
+
+    console.log(tokens, "<<---tokens--->>");
 
     response.cookie('access_token', tokens.accessToken, {
       ...cookieConfig.access.options,
